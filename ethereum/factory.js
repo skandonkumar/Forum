@@ -3,7 +3,7 @@ import ForumFactory from './build/ForumFactory';
 
 const instance = new web3.eth.Contract(
     JSON.parse(ForumFactory.interface),
-    '0xf0A29B12c1062370D2C47D70563f782546dC9E8E'
+    '0x83A0a58666A5E301487939db24dCF4b8B4fcc039'
 );
 
 export default instance;

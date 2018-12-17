@@ -16,17 +16,15 @@ export default class QuestionShow extends Component {
 
     static async getInitialProps(props) {
 
-        const question = Question(props.query.address);
-        const summary = await question.methods.getQuestionDetails().call();
-
-        console.log(summary);
+        const questionInstance = Question(props.query.address);
+        const summary = await questionInstance.methods.getQuestionDetails().call();
+        const manager = await questionInstance.methods.manager().call();
         return {
-            address: props.query.address,
+            questionAddress: props.query.address,
             value: summary[0],
             title: summary[1],
             description: summary[2],
-            question
-
+            manager:manager
         };
 
     }
@@ -37,6 +35,7 @@ export default class QuestionShow extends Component {
             value,
             title,
             description,
+            questionAddress,
             manager
         } = this.props;
 
@@ -69,14 +68,14 @@ export default class QuestionShow extends Component {
     onSubmit = async (event) => {
 
         event.preventDefault();
-        const question = Question(this.props.address);
-
+        const questionInstance = Question(this.props.questionAddress);
+        const questionAddress = this.props.questionAddress;
 
         this.setState({loading: true, errorMessage: '' });
         try {
             const accounts = await web3.eth.getAccounts();
-            // console.log(accounts[0]);
-            await question.methods
+            console.log(questionInstance);
+            await questionInstance.methods
                 .postAnswer(this.state.answer)
                 .send({
                     from: accounts[0]
@@ -93,7 +92,6 @@ export default class QuestionShow extends Component {
     };
 
     render() {
-
         return (
 
             <Layout>
@@ -125,11 +123,10 @@ export default class QuestionShow extends Component {
                                 content={this.state.errorMessage ? this.state.errorMessage : this.state.successMessage }
                             />
                             <Button style={{ marginBottom: '10px'}} loading={this.state.loading} primary>Post Your Answer</Button>
-                            <Button floated='right' primary>Vote</Button>
                         </Form>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <Link route={`/questions/${this.props.address}/answers`}>
+                        <Link route={`/questions/${this.props.questionAddress}/answers`}>
                             <a>
                                 <Button floated='right' primary> View Answers </Button>
                             </a>

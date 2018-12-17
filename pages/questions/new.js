@@ -12,7 +12,7 @@ export default class QuestionNew extends Component {
         value: '',
         title: '',
         description: '',
-        complete: true,
+        complete: false,
         errorMessage: '',
         loading: false
     };
@@ -23,7 +23,6 @@ export default class QuestionNew extends Component {
         this.setState({ loading: true, errorMessage: '' });
         try {
             const accounts = await web3.eth.getAccounts();
-            console.log(accounts[0]);
             await factory.methods
                 .createQuestion(this.state.value, this.state.title, this.state.description, this.state.complete)
                 .send({
@@ -75,11 +74,11 @@ export default class QuestionNew extends Component {
                             style={{ minHeight: 100 }}
                         />
 
-                        <Checkbox label="Found an Answer?"
-                                  onChange={ event =>
-                                  this.setState({complete: event.target.value })}
-                                  checked={!this.state.complete}
-                        />
+                        {/*<Checkbox label="Found an Answer?"*/}
+                                  {/*onChange={ event =>*/}
+                                  {/*this.setState({complete: event.target.value })}*/}
+                                  {/*checked={!this.state.complete}*/}
+                        {/*/>*/}
 
                     </Form.Field>
 

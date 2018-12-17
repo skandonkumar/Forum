@@ -79,12 +79,21 @@ contract Question{
         return answers.length;
     }
 
-    function finalizeAnswer(uint index) public {
+    function finalizeAnswer(uint256 index) public payable returns(uint){
         require(msg.sender == manager);
+        require(msg.value > value);
+        require(complete == false);
         Answer storage answer = answers[index];
-
-        answer.responder.transfer(value);
+        transferBalance(answer.responder, value);
         complete = true;
     }
 
+    function getBalance() public view returns(uint256){
+        return this.balance;
+    }
+
+    function transferBalance(address recepient, uint256 transferValue) public {
+        require(this.balance > transferValue);
+        recepient.transfer(transferValue);
+    }
 }
